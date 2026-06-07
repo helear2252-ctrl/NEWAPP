@@ -283,66 +283,74 @@ def run_image_generation(prompt: str):
         st.session_state.error_message = "🔑 API Token is missing! Please configure the `HF_TOKEN` environment variable or Streamlit Secrets."
         return
     
-    api_url = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
+    # Try the CloudFront router endpoint first (bypasses DNS block issues in some networks) with the standard domain as fallback
+    api_urls = [
+        "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell",
+        "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
+    ]
     headers = {"Authorization": f"Bearer {hf_token}"}
     payload = {"inputs": prompt}
     
     max_retries = 3
     retry_delay = 6
     
-    for attempt in range(max_retries):
-        try:
-            response = requests.post(api_url, headers=headers, json=payload, timeout=60)
-            
-            if response.status_code == 200:
-                try:
-                    img_bytes = response.content
-                    image = Image.open(io.BytesIO(img_bytes))
-                    st.session_state.generated_image = image
-                    st.session_state.error_message = None
-                    return
-                except Exception as img_err:
-                    st.session_state.error_message = f"🖼️ Image loading error: Received bytes could not be decoded. Details: {str(img_err)}"
-                    return
-                    
-            elif response.status_code == 503:
-                # Model is currently loading, wait and retry
-                try:
-                    error_json = response.json()
-                    wait_time = float(error_json.get("estimated_time", retry_delay))
-                except Exception:
-                    wait_time = retry_delay
+    for api_url in api_urls:
+        for attempt in range(max_retries):
+            try:
+                response = requests.post(api_url, headers=headers, json=payload, timeout=60)
                 
-                if attempt < max_retries - 1:
-                    with st.spinner(f"⏳ Hugging Face model is initializing (attempt {attempt+1}/{max_retries}). Waiting {int(wait_time)}s..."):
-                        time.sleep(wait_time)
-                    continue
+                if response.status_code == 200:
+                    try:
+                        img_bytes = response.content
+                        image = Image.open(io.BytesIO(img_bytes))
+                        st.session_state.generated_image = image
+                        st.session_state.error_message = None
+                        return
+                    except Exception as img_err:
+                        st.session_state.error_message = f"🖼️ Image loading error: Received bytes could not be decoded. Details: {str(img_err)}"
+                        return
+                        
+                elif response.status_code == 503:
+                    # Model is currently loading, wait and retry
+                    try:
+                        error_json = response.json()
+                        wait_time = float(error_json.get("estimated_time", retry_delay))
+                    except Exception:
+                        wait_time = retry_delay
+                    
+                    if attempt < max_retries - 1:
+                        with st.spinner(f"⏳ Hugging Face model is initializing (attempt {attempt+1}/{max_retries}). Waiting {int(wait_time)}s..."):
+                            time.sleep(wait_time)
+                        continue
+                    else:
+                        break
+                        
+                elif response.status_code == 401:
+                    st.session_state.error_message = "🔒 Authentication Failed: The provided `HF_TOKEN` is invalid or does not have permissions. Please check your credentials."
+                    return
                 else:
-                    st.session_state.error_message = f"⚡ Hugging Face model loading timed out. Please try again in a moment. (HTTP 503)"
-                    return
+                    try:
+                        error_msg = response.json().get("error", f"HTTP status {response.status_code}")
+                    except Exception:
+                        error_msg = f"HTTP {response.status_code} error response"
+                    st.session_state.error_message = f"🚨 API Error: {error_msg}"
+                    break
                     
-            elif response.status_code == 401:
-                st.session_state.error_message = "🔒 Authentication Failed: The provided `HF_TOKEN` is invalid or does not have permissions. Please check your credentials."
-                return
-            else:
-                try:
-                    error_msg = response.json().get("error", f"HTTP status {response.status_code}")
-                except Exception:
-                    error_msg = f"HTTP {response.status_code} error response"
-                st.session_state.error_message = f"🚨 API Error: {error_msg}"
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+                if attempt < max_retries - 1:
+                    time.sleep(2)
+                    continue
+                break  # Try next api_url if this one fails to connect
+            except requests.exceptions.RequestException as e:
+                st.session_state.error_message = f"🔌 Network connection failure: Details: {str(e)}"
                 return
                 
-        except requests.exceptions.Timeout:
-            if attempt < max_retries - 1:
-                time.sleep(2)
-                continue
-            st.session_state.error_message = "🌐 Network Timeout: The request took too long. Please check your internet connection and try again."
-            return
-        except requests.exceptions.RequestException as e:
-            st.session_state.error_message = f"🔌 Network connection failure: Could not reach Hugging Face API. Details: {str(e)}"
+        if st.session_state.generated_image:
             return
             
-    st.session_state.error_message = "❌ Failed to generate image after multiple attempts due to API unavailability."
+    if not st.session_state.error_message:
+        st.session_state.error_message = "❌ Failed to connect to Hugging Face API endpoints. Please verify your internet connection."
+
 
 
 # --- PAGE LAYOUT SETUP ---
