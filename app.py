@@ -278,10 +278,14 @@ def set_prompt(text):
 
 # Core Inference API Call function
 def run_image_generation(prompt: str):
-    hf_token = os.getenv("HF_TOKEN")
-    if not hf_token:
+    raw_token = os.getenv("HF_TOKEN")
+    if not raw_token:
         st.session_state.error_message = "🔑 API Token is missing! Please configure the `HF_TOKEN` environment variable or Streamlit Secrets."
         return
+    
+    # Sanitize token to avoid UnicodeEncodeError (latin-1) caused by copy-pasted smart quotes, white spaces or invisible unicode characters
+    hf_token = raw_token.strip().strip("'\"").replace("“", "").replace("”", "").replace("‘", "").replace("’", "")
+    hf_token = "".join(c for c in hf_token if ord(c) < 128)
     
     # Try the CloudFront router endpoint first (bypasses DNS block issues in some networks) with the standard domain as fallback
     api_urls = [
