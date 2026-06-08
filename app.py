@@ -507,6 +507,126 @@ div[data-testid="column"]:has(.mode-card-wrapper) div.stButton > button {{
     0%, 100% {{ transform: translateY(0) rotate(6deg); }}
     50% {{ transform: translateY(-15px) rotate(4deg); }}
 }}
+
+/* --- BUBBLE TO ART BACKGROUND ANIMATION --- */
+.bubble-container {{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -2;
+    overflow: hidden;
+}}
+
+.art-bubble {{
+    position: absolute;
+    bottom: -100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}}
+
+.bubble-shell-wrapper {{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}}
+
+.bubble-shell {{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(164, 137, 119, 0.25);
+    background: radial-gradient(circle at 30% 30%, rgba(241, 230, 216, 0.3) 0%, rgba(164, 137, 119, 0.08) 70%, rgba(164, 137, 119, 0.15) 100%);
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.4), 0 2px 10px rgba(164, 137, 119, 0.05);
+}}
+
+.bubble-cracks {{
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    opacity: 0;
+    pointer-events: none;
+}}
+
+.pop-icon-wrapper {{
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+}}
+
+.pop-icon-wrapper svg {{
+    width: 100%;
+    height: 100%;
+}}
+
+/* Individual bubble configurations */
+.ab-1 {{ width: 70px; height: 70px; left: 10%; --max-op: 0.08; --icon-op: 0.28; --sway-x: -15px; animation: rise-translate 15s infinite linear; }}
+.ab-2 {{ width: 85px; height: 85px; left: 26%; --max-op: 0.11; --icon-op: 0.32; --sway-x: 20px; animation: rise-translate 18s infinite linear 3s; }}
+.ab-3 {{ width: 60px; height: 60px; left: 42%; --max-op: 0.07; --icon-op: 0.25; --sway-x: -10px; animation: rise-translate 13s infinite linear 1.5s; }}
+.ab-4 {{ width: 90px; height: 90px; left: 58%; --max-op: 0.12; --icon-op: 0.35; --sway-x: 18px; animation: rise-translate 17s infinite linear 4.5s; }}
+.ab-5 {{ width: 65px; height: 65px; left: 74%; --max-op: 0.09; --icon-op: 0.30; --sway-x: -20px; animation: rise-translate 16s infinite linear 2s; }}
+.ab-6 {{ width: 75px; height: 75px; left: 88%; --max-op: 0.06; --icon-op: 0.26; --sway-x: 12px; animation: rise-translate 19s infinite linear 5.5s; }}
+
+/* Animation assignments */
+.art-bubble .bubble-shell {{ animation: shell-pop 15s infinite linear inherit; }}
+.art-bubble .bubble-cracks {{ animation: cracks-pop 15s infinite linear inherit; }}
+.art-bubble .pop-icon-wrapper {{ animation: icon-release 15s infinite linear inherit; }}
+
+/* Apply inheritance properties to inner animations to sync duration and delay */
+.ab-1 .bubble-shell, .ab-1 .bubble-cracks, .ab-1 .pop-icon-wrapper {{ animation-duration: 15s; animation-delay: 0s; }}
+.ab-2 .bubble-shell, .ab-2 .bubble-cracks, .ab-2 .pop-icon-wrapper {{ animation-duration: 18s; animation-delay: 3s; }}
+.ab-3 .bubble-shell, .ab-3 .bubble-cracks, .ab-3 .pop-icon-wrapper {{ animation-duration: 13s; animation-delay: 1.5s; }}
+.ab-4 .bubble-shell, .ab-4 .bubble-cracks, .ab-4 .pop-icon-wrapper {{ animation-duration: 17s; animation-delay: 4.5s; }}
+.ab-5 .bubble-shell, .ab-5 .bubble-cracks, .ab-5 .pop-icon-wrapper {{ animation-duration: 16s; animation-delay: 2s; }}
+.ab-6 .bubble-shell, .ab-6 .bubble-cracks, .ab-6 .pop-icon-wrapper {{ animation-duration: 19s; animation-delay: 5.5s; }}
+
+/* Keyframe Animations */
+@keyframes rise-translate {{
+    0% {{ transform: translateY(110vh) translateX(0); opacity: 0; }}
+    8% {{ opacity: 1; }}
+    50% {{ transform: translateY(50vh) translateX(var(--sway-x)); opacity: 1; }}
+    50.1% {{ opacity: 0.35; }}
+    100% {{ transform: translateY(-5vh) translateX(calc(var(--sway-x) * -1.2)); opacity: 0; }}
+}}
+
+@keyframes shell-pop {{
+    0% {{ opacity: calc(var(--max-op) * 0.8); transform: scale(0.8); }}
+    8% {{ opacity: var(--max-op); }}
+    40% {{ opacity: var(--max-op); transform: scale(1) rotate(0deg); }}
+    44% {{ opacity: calc(var(--max-op) * 1.2); transform: scale(1.05) rotate(3deg); }}
+    47% {{ opacity: calc(var(--max-op) * 0.9); transform: scale(0.95) rotate(-3deg); }}
+    49% {{ opacity: calc(var(--max-op) * 1.3); transform: scale(1.1) rotate(1deg); }}
+    49.9% {{ opacity: calc(var(--max-op) * 1.3); transform: scale(1.15) rotate(0deg); }}
+    50% {{ opacity: 0; transform: scale(1.4); }}
+    100% {{ opacity: 0; transform: scale(1.4); }}
+}}
+
+@keyframes cracks-pop {{
+    0%, 40% {{ opacity: 0; transform: scale(0.8); }}
+    44% {{ opacity: 0.08; transform: scale(0.95); }}
+    49% {{ opacity: 0.15; transform: scale(1.05); }}
+    49.9% {{ opacity: 0.18; transform: scale(1.1); }}
+    50%, 100% {{ opacity: 0; }}
+}}
+
+@keyframes icon-release {{
+    0%, 49.9% {{ opacity: 0; transform: scale(0.5) translateY(15px); }}
+    50% {{ opacity: var(--icon-op); transform: scale(1.2) translateY(0); }}
+    60% {{ opacity: calc(var(--icon-op) * 0.8); transform: scale(1) translateY(-15px); }}
+    100% {{ opacity: 0; transform: scale(0.7) translateY(-60px); }}
+}}
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
@@ -778,6 +898,114 @@ background_html = """
             </svg>
         </div>
         <div class="art-caption">Watercolor Art</div>
+    </div>
+</div>
+
+<!-- Bubble To Art Background Animation -->
+<div class="bubble-container">
+    <!-- Bubble 1: Logo -->
+    <div class="art-bubble ab-1">
+        <div class="bubble-shell-wrapper">
+            <div class="bubble-shell"></div>
+            <svg class="bubble-cracks" viewBox="0 0 100 100">
+                <path d="M50 50 L45 35 M50 50 L58 40 M50 50 L40 55 M50 50 L55 62 M50 50 L62 52 M50 50 L38 45" stroke="#A48977" stroke-width="1.5" stroke-linecap="round" fill="none" />
+            </svg>
+        </div>
+        <div class="pop-icon-wrapper">
+            <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="30" stroke="#A48977" stroke-width="1.2" fill="none"/>
+                <circle cx="50" cy="50" r="15" stroke="#A48977" stroke-width="0.8" fill="none"/>
+                <line x1="50" y1="10" x2="50" y2="90" stroke="#A48977" stroke-width="0.5" stroke-dasharray="2,2"/>
+                <line x1="10" y1="50" x2="90" y2="50" stroke="#A48977" stroke-width="0.5" stroke-dasharray="2,2"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Bubble 2: Paint Brush -->
+    <div class="art-bubble ab-2">
+        <div class="bubble-shell-wrapper">
+            <div class="bubble-shell"></div>
+            <svg class="bubble-cracks" viewBox="0 0 100 100">
+                <path d="M50 50 L42 38 M50 50 L60 38 M50 50 L38 52 M50 50 L58 60 M50 50 L64 48 M50 50 L36 44" stroke="#A48977" stroke-width="1.5" stroke-linecap="round" fill="none" />
+            </svg>
+        </div>
+        <div class="pop-icon-wrapper">
+            <svg viewBox="0 0 100 100">
+                <path d="M35 65 L60 40 L65 45 L40 70 Z M60 40 L70 30 C72 28, 76 28, 78 30 C80 32, 80 36, 78 38 L68 48 Z M35 65 L25 75 L30 70 Z" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+                <path d="M25 75 L20 80 L22 73 Z" fill="#A48977"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Bubble 3: Camera -->
+    <div class="art-bubble ab-3">
+        <div class="bubble-shell-wrapper">
+            <div class="bubble-shell"></div>
+            <svg class="bubble-cracks" viewBox="0 0 100 100">
+                <path d="M50 50 L46 34 M50 50 L56 36 M50 50 L42 56 M50 50 L54 64 M50 50 L64 54 M50 50 L36 46" stroke="#A48977" stroke-width="1.5" stroke-linecap="round" fill="none" />
+            </svg>
+        </div>
+        <div class="pop-icon-wrapper">
+            <svg viewBox="0 0 100 100">
+                <path d="M20 40 h15 l5-8 h20 l5 8 h15 v35 h-60 z" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+                <circle cx="50" cy="58" r="14" stroke="#A48977" stroke-width="1.2" fill="none"/>
+                <circle cx="50" cy="58" r="7" stroke="#A48977" stroke-width="0.8" fill="none"/>
+                <circle cx="70" cy="46" r="3" fill="#A48977"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Bubble 4: Palette -->
+    <div class="art-bubble ab-4">
+        <div class="bubble-shell-wrapper">
+            <div class="bubble-shell"></div>
+            <svg class="bubble-cracks" viewBox="0 0 100 100">
+                <path d="M50 50 L44 32 M50 50 L60 42 M50 50 L38 54 M50 50 L56 66 M50 50 L66 52 M50 50 L34 42" stroke="#A48977" stroke-width="1.5" stroke-linecap="round" fill="none" />
+            </svg>
+        </div>
+        <div class="pop-icon-wrapper">
+            <svg viewBox="0 0 100 100">
+                <path d="M50 20 C25 20, 20 38, 20 55 C20 72, 38 80, 55 80 C68 80, 80 72, 80 58 C80 44, 75 42, 68 42 C64 42, 60 46, 56 46 C52 46, 50 38, 50 20 Z" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+                <circle cx="35" cy="40" r="3" fill="#A48977"/>
+                <circle cx="45" cy="62" r="3" fill="#A48977"/>
+                <circle cx="65" cy="62" r="3" fill="#A48977"/>
+                <circle cx="68" cy="32" r="2.5" stroke="#A48977" stroke-width="0.8" fill="none"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Bubble 5: AI Image -->
+    <div class="art-bubble ab-5">
+        <div class="bubble-shell-wrapper">
+            <div class="bubble-shell"></div>
+            <svg class="bubble-cracks" viewBox="0 0 100 100">
+                <path d="M50 50 L45 36 M50 50 L57 38 M50 50 L40 57 M50 50 L55 64 M50 50 L63 50 M50 50 L37 46" stroke="#A48977" stroke-width="1.5" stroke-linecap="round" fill="none" />
+            </svg>
+        </div>
+        <div class="pop-icon-wrapper">
+            <svg viewBox="0 0 100 100">
+                <rect x="22" y="22" width="56" height="56" rx="6" stroke="#A48977" stroke-width="1.2" fill="none"/>
+                <circle cx="38" cy="38" r="6" stroke="#A48977" stroke-width="1.2" fill="none"/>
+                <path d="M22 66 L42 46 L62 66 M54 58 L66 46 L78 58" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Bubble 6: Creative Frame -->
+    <div class="art-bubble ab-6">
+        <div class="bubble-shell-wrapper">
+            <div class="bubble-shell"></div>
+            <svg class="bubble-cracks" viewBox="0 0 100 100">
+                <path d="M50 50 L43 35 M50 50 L59 39 M50 50 L39 53 M50 50 L57 63 M50 50 L65 51 M50 50 L35 45" stroke="#A48977" stroke-width="1.5" stroke-linecap="round" fill="none" />
+            </svg>
+        </div>
+        <div class="pop-icon-wrapper">
+            <svg viewBox="0 0 100 100">
+                <rect x="20" y="20" width="60" height="60" stroke="#A48977" stroke-width="1.2" fill="none"/>
+                <path d="M10 20 h20 M20 10 v20 M80 10 v20 M70 20 h20 M80 90 v-20 M70 80 h20 M10 80 h20 M20 70 v20" stroke="#A48977" stroke-width="1" fill="none"/>
+                <circle cx="50" cy="50" r="8" stroke="#A48977" stroke-width="1" fill="none" stroke-dasharray="2,2"/>
+            </svg>
+        </div>
     </div>
 </div>
 """
