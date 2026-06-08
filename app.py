@@ -701,86 +701,167 @@ def translate_and_enhance_prompt(prompt_text: str, mode: str) -> str:
         
     return enhanced
 
-# Core Inference API Call function
-def run_image_generation(prompt: str):
+# Core Inference API Call functions
+
+def run_nvidia_generation(prompt: str):
     raw_token = os.getenv("HF_TOKEN")
     if not raw_token:
         st.session_state.error_message = "🔑 API Token is missing! Please configure the `HF_TOKEN` environment variable or Streamlit Secrets."
         return
-    
-    # Sanitize token to avoid UnicodeEncodeError (latin-1) caused by copy-pasted smart quotes, white spaces or invisible unicode characters
+
     hf_token = raw_token.strip().strip("'\"").replace("“", "").replace("”", "").replace("‘", "").replace("’", "")
     hf_token = "".join(c for c in hf_token if ord(c) < 128)
-    
-    # Try the CloudFront router endpoint first (bypasses DNS block issues in some networks) with the standard domain as fallback
+
+    api_url = "https://api-inference.huggingface.co/models/nvidia/Cosmos3-Super-Text2Image"
+    headers = {"Authorization": f"Bearer {hf_token}"}
+    payload = {"inputs": prompt}
+
+    max_retries = 3
+    retry_delay = 5
+
+    for attempt in range(max_retries):
+        try:
+            response = requests.post(api_url, headers=headers, json=payload, timeout=60)
+
+            if response.status_code == 200:
+                try:
+                    image = Image.open(io.BytesIO(response.content))
+                    image.load()
+                    st.session_state.generated_image = image
+                    st.session_state.error_message = None
+                    return
+                except Exception as img_err:
+                    st.session_state.error_message = f"🖼️ NVIDIA image loading error: {str(img_err)}"
+                    return
+
+            if response.status_code == 503:
+                try:
+                    error_json = response.json()
+                    wait_time = float(error_json.get("estimated_time", retry_delay))
+                except Exception:
+                    wait_time = retry_delay
+
+                if attempt < max_retries - 1:
+                    with st.spinner(f"⏳ NVIDIA Cosmos model is initializing (attempt {attempt+1}/{max_retries}). Waiting {int(wait_time)}s..."):
+                        time.sleep(wait_time)
+                    continue
+                break
+
+            if response.status_code == 401:
+                st.session_state.error_message = "🔒 Authentication Failed: The provided `HF_TOKEN` is invalid or does not have permissions. Please check your credentials."
+                return
+
+            try:
+                error_json = response.json()
+                error_msg = error_json.get("error", "")
+            except Exception:
+                error_msg = ""
+            st.session_state.error_message = f"🚨 NVIDIA API Error: {error_msg if error_msg else f'HTTP status {response.status_code}'}"
+            return
+
+        except requests.exceptions.RequestException as err:
+            if attempt < max_retries - 1:
+                time.sleep(2)
+                continue
+            st.session_state.error_message = f"🔌 NVIDIA network connection failure: Details: {str(err)}"
+            break
+
+    if not st.session_state.error_message:
+        st.session_state.error_message = "⚠️ NVIDIA 免費生成模型目前忙碌或暫時無法使用，請稍後再試。"
+
+
+def run_flux_generation(prompt: str):
+    raw_token = os.getenv("HF_TOKEN")
+    if not raw_token:
+        st.session_state.error_message = "🔑 API Token is missing! Please configure the `HF_TOKEN` environment variable or Streamlit Secrets."
+        return
+
+    hf_token = raw_token.strip().strip("'\"").replace("“", "").replace("”", "").replace("‘", "").replace("’", "")
+    hf_token = "".join(c for c in hf_token if ord(c) < 128)
+
     api_urls = [
         "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell",
-        "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
+        "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
     ]
     headers = {"Authorization": f"Bearer {hf_token}"}
     payload = {"inputs": prompt}
-    
+
     max_retries = 3
     retry_delay = 6
-    
+
     for api_url in api_urls:
         for attempt in range(max_retries):
             try:
                 response = requests.post(api_url, headers=headers, json=payload, timeout=60)
-                
+
                 if response.status_code == 200:
                     try:
-                        img_bytes = response.content
-                        image = Image.open(io.BytesIO(img_bytes))
+                        image = Image.open(io.BytesIO(response.content))
+                        image.load()
                         st.session_state.generated_image = image
                         st.session_state.error_message = None
                         return
                     except Exception as img_err:
                         st.session_state.error_message = f"🖼️ Image loading error: Received bytes could not be decoded. Details: {str(img_err)}"
                         return
-                        
-                elif response.status_code == 503:
-                    # Model is currently loading, wait and retry
+
+                if response.status_code == 503:
                     try:
                         error_json = response.json()
                         wait_time = float(error_json.get("estimated_time", retry_delay))
                     except Exception:
                         wait_time = retry_delay
-                    
+
                     if attempt < max_retries - 1:
                         with st.spinner(f"⏳ AI system is initializing (attempt {attempt+1}/{max_retries}). Waiting {int(wait_time)}s..."):
                             time.sleep(wait_time)
                         continue
-                    else:
-                        break
-                        
-                elif response.status_code == 401:
+                    break
+
+                if response.status_code == 429:
+                    st.session_state.error_message = "⚠️ FLUX 額度已耗盡，請改用「快速圖片生成」模式，或等待下個月額度重置。"
+                    return
+
+                if response.status_code == 401:
                     st.session_state.error_message = "🔒 Authentication Failed: The provided `HF_TOKEN` is invalid or does not have permissions. Please check your credentials."
                     return
-                else:
-                    try:
-                        error_msg = response.json().get("error", f"HTTP status {response.status_code}")
-                    except Exception:
-                        error_msg = f"HTTP {response.status_code} error response"
-                    st.session_state.error_message = f"🚨 API Error: {error_msg}"
-                    break
-                    
-            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
-                if attempt < max_retries - 1:
+
+                try:
+                    error_json = response.json()
+                    error_msg = error_json.get("error", "")
+                except Exception:
+                    error_msg = ""
+
+                if "rate limit" in error_msg.lower() or "limit" in error_msg.lower() or "quota" in error_msg.lower():
+                    st.session_state.error_message = "⚠️ FLUX 額度已耗盡，請改用「快速圖片生成」模式，或等待下個月額度重置。"
+                    return
+
+                st.session_state.error_message = f"🚨 API Error: {error_msg if error_msg else f'HTTP status {response.status_code}'}"
+                break
+
+            except requests.exceptions.RequestException as e:
+                if isinstance(e, (requests.exceptions.ConnectionError, requests.exceptions.Timeout)) and attempt < max_retries - 1:
                     time.sleep(2)
                     continue
-                break  # Try next api_url if this one fails to connect
-            except requests.exceptions.RequestException as e:
                 st.session_state.error_message = f"🔌 Network connection failure: Details: {str(e)}"
                 return
-                
+
         if st.session_state.generated_image:
             return
-            
+
     if not st.session_state.error_message:
         st.session_state.error_message = "❌ Failed to connect to the generation server. Please verify your internet connection."
 
 
+def run_image_generation(prompt: str):
+    generation_mode = st.session_state.get("generation_mode", "快速圖片生成")
+
+    if generation_mode == "快速圖片生成":
+        run_nvidia_generation(prompt)
+    elif generation_mode in ("精準深層生成", "商業 Logo 生成"):
+        run_flux_generation(prompt)
+    else:
+        st.session_state.error_message = f"⚠️ Unknown generation mode: {generation_mode}"
 
 # --- PAGE LAYOUT SETUP ---
 
