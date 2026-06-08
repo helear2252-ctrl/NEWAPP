@@ -658,7 +658,7 @@ with col_top_left:
             </div>
         </div>
         ''', unsafe_allow_html=True)
-        if st.button("Select Fast", key="select_fast", label_visibility="collapsed"):
+        if st.button("Select Fast", key="select_fast"):
             st.session_state.generation_mode = "快速圖片生成"
             st.rerun()
             
@@ -673,7 +673,7 @@ with col_top_left:
             </div>
         </div>
         ''', unsafe_allow_html=True)
-        if st.button("Select Precise", key="select_precise", label_visibility="collapsed"):
+        if st.button("Select Precise", key="select_precise"):
             st.session_state.generation_mode = "精準深層生成"
             st.rerun()
             
@@ -688,7 +688,7 @@ with col_top_left:
             </div>
         </div>
         ''', unsafe_allow_html=True)
-        if st.button("Select Logo", key="select_logo", label_visibility="collapsed"):
+        if st.button("Select Logo", key="select_logo"):
             st.session_state.generation_mode = "商業 Logo 生成"
             st.rerun()
         
