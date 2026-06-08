@@ -863,7 +863,7 @@ def run_image_generation(prompt: str):
     generation_mode = st.session_state.get("generation_mode", "快速圖片生成")
 
     if generation_mode == "快速圖片生成":
-        run_nvidia_generation(prompt)
+        run_flux_generation(prompt)
     elif generation_mode in ("精準深層生成", "商業 Logo 生成"):
         run_flux_generation(prompt)
     else:
