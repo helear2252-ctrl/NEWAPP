@@ -299,31 +299,73 @@ div.stButton > button:active {{
     transform: translateY(1px) !important;
 }}
 
-/* Custom styling for Streamlit Radio Buttons to look like premium segmented tabs */
-div[data-testid="stRadio"] > div {{
-    gap: 12px;
+/* Mode Cards Overlay Mechanics */
+div[data-testid="column"]:has(.mode-card-wrapper) {{
+    position: relative !important;
 }}
-div[data-testid="stRadio"] label {{
-    background: rgba(234, 231, 218, 0.5) !important;
-    border: 1px solid rgba(164, 137, 119, 0.15) !important;
-    padding: 8px 16px !important;
-    border-radius: 10px !important;
-    color: #3F352E !important;
+div[data-testid="column"]:has(.mode-card-wrapper) div.stButton {{
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 10 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}}
+div[data-testid="column"]:has(.mode-card-wrapper) div.stButton > button {{
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    border: none !important;
+    background: transparent !important;
     cursor: pointer !important;
-    transition: all 0.2s ease !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }}
-div[data-testid="stRadio"] label:hover {{
-    border-color: rgba(164, 137, 119, 0.4) !important;
-    background: rgba(234, 231, 218, 0.8) !important;
+
+.mode-card-wrapper {{
+    position: relative;
+    width: 100%;
+    height: 120px;
+    margin-bottom: 20px;
 }}
-div[data-testid="stRadio"] label[data-checked="true"] {{
-    background: #A48977 !important;
+.mode-card {{
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(164, 137, 119, 0.35) !important;
+    border-radius: 18px !important;
+    padding: 20px !important;
+    color: #4A2E1F !important;
+    box-shadow: 0 10px 30px rgba(164, 137, 119, 0.12) !important;
+    transition: all 0.3s ease !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}}
+.mode-card.card-active {{
+    border: 2px solid #A48977 !important;
+    background: rgba(164, 137, 119, 0.12) !important;
+}}
+.mode-card:hover, div[data-testid="column"]:has(.mode-card-wrapper):hover .mode-card {{
+    transform: translateY(-4px) !important;
     border-color: #A48977 !important;
-    color: #F7F4ED !important;
+    box-shadow: 0 14px 35px rgba(164, 137, 119, 0.18) !important;
 }}
-div[data-testid="stRadio"] label span[data-baseweb="radio"],
-div[data-testid="stRadio"] label div[role="radio"] {{
-    display: none !important;
+.card-title {{
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #4A2E1F !important;
+    margin-bottom: 6px !important;
+}}
+.card-desc {{
+    color: #7A6A5E !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
 }}
 
 /* Badge styling */
@@ -601,17 +643,54 @@ with col_top_left:
     st.markdown('<div class="main-subtitle">Creative AI Studio  •  Prompt to Art  •  AI Gallery</div>', unsafe_allow_html=True)
     
     # Generation Mode Selector
-    st.markdown('<p style="color:#A48977; font-size:14px; font-weight:500; margin-bottom: 8px;">Generation Mode</p>', unsafe_allow_html=True)
-    generation_mode = st.radio(
-        label="Generation Mode Selector",
-        options=["快速圖片生成", "精準深層生成", "商業 Logo 生成"],
-        index=["快速圖片生成", "精準深層生成", "商業 Logo 生成"].index(st.session_state.generation_mode),
-        horizontal=True,
-        label_visibility="collapsed"
-    )
-    if generation_mode != st.session_state.generation_mode:
-        st.session_state.generation_mode = generation_mode
-        st.rerun()
+    st.markdown('<p style="color:#A48977; font-size:14px; font-weight:500; margin-bottom: 8px; font-family: \'Outfit\', sans-serif;">Generation Mode</p>', unsafe_allow_html=True)
+    
+    col_card1, col_card2, col_card3 = st.columns(3)
+    
+    with col_card1:
+        is_active = (st.session_state.generation_mode == "快速圖片生成")
+        active_class = "card-active" if is_active else ""
+        st.markdown(f'''
+        <div class="mode-card-wrapper">
+            <div class="mode-card {active_class}">
+                <div class="card-title">🖼️ 快速圖片生成</div>
+                <div class="card-desc">快速生成精美圖片</div>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+        if st.button("Select Fast", key="select_fast", label_visibility="collapsed"):
+            st.session_state.generation_mode = "快速圖片生成"
+            st.rerun()
+            
+    with col_card2:
+        is_active = (st.session_state.generation_mode == "精準深層生成")
+        active_class = "card-active" if is_active else ""
+        st.markdown(f'''
+        <div class="mode-card-wrapper">
+            <div class="mode-card {active_class}">
+                <div class="card-title">✨ 精準深層生成</div>
+                <div class="card-desc">更高品質、更細緻</div>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+        if st.button("Select Precise", key="select_precise", label_visibility="collapsed"):
+            st.session_state.generation_mode = "精準深層生成"
+            st.rerun()
+            
+    with col_card3:
+        is_active = (st.session_state.generation_mode == "商業 Logo 生成")
+        active_class = "card-active" if is_active else ""
+        st.markdown(f'''
+        <div class="mode-card-wrapper">
+            <div class="mode-card {active_class}">
+                <div class="card-title">🏷️ 商業 Logo 生成</div>
+                <div class="card-desc">打造品牌專屬 Logo</div>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+        if st.button("Select Logo", key="select_logo", label_visibility="collapsed"):
+            st.session_state.generation_mode = "商業 Logo 生成"
+            st.rerun()
         
     # Dynamic placeholder and input label
     if st.session_state.generation_mode == "商業 Logo 生成":
