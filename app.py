@@ -787,7 +787,6 @@ def run_flux_generation(prompt: str):
 
     api_urls = [
         "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell",
-        "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
     ]
     headers = {"Authorization": f"Bearer {hf_token}"}
     payload = {"inputs": prompt}
