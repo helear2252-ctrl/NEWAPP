@@ -32,6 +32,11 @@ def get_base64_img(file_path):
     return ""
 
 base64_bg = get_base64_img(BG_PATH)
+background_image_css = (
+    f'background-image: url("data:image/jpeg;base64,{base64_bg}") !important;'
+    if base64_bg
+    else 'background-image: url("assets/background.jpg") !important;'
+)
 
 # Custom premium CSS injection
 css_style = f"""
@@ -979,6 +984,28 @@ div.stButton,
     .pc-1 {{ right: -24px; top: 8%; width: 118px !important; }}
     .main-title {{ font-size: 48px !important; margin-top: 20px !important; }}
     .mode-label::before, .mode-label::after {{ width: 44px; }}
+}}
+
+/* Final background image mode: use the provided artwork directly */
+.stApp {{
+    {background_image_css}
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}}
+.stApp::before,
+.stApp::after,
+.bg-layer-1,
+.bg-layer-2,
+.bg-layer-3,
+.champagne-particles,
+.background-bubble,
+.bubble-label,
+.flow-rail,
+.floating-gallery-container,
+.bubble-container {{
+    display: none !important;
 }}
 </style>
 """
