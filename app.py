@@ -638,6 +638,143 @@ div.stButton,
     position: relative;
     z-index: 10 !important;
 }}
+/* Reference image visual-only overrides: keep inside css_style */
+.stApp {{
+    background:
+        radial-gradient(circle at 50% 4%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 34%),
+        radial-gradient(circle at 12% 24%, rgba(255, 246, 232, 0.78), rgba(255, 246, 232, 0) 32%),
+        radial-gradient(circle at 86% 18%, rgba(201, 167, 126, 0.22), rgba(201, 167, 126, 0) 36%),
+        linear-gradient(125deg, #FAF7EF 0%, #F8F1E7 48%, #EFE2D0 100%) !important;
+    color: #6E4E3D !important;
+}}
+.stApp::before {{
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 2px),
+        radial-gradient(circle, rgba(201, 167, 126, 0.34) 0 1px, transparent 2px),
+        radial-gradient(circle, rgba(255, 244, 226, 0.72) 0 2px, transparent 4px);
+    background-size: 42px 42px, 76px 76px, 128px 128px;
+    background-position: 8px 10px, 28px 19px, 42px 34px;
+    opacity: 0.52;
+    filter: blur(0.25px);
+}}
+.bg-layer-1 {{
+    background:
+        radial-gradient(circle at 48% 0%, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0) 30%),
+        linear-gradient(125deg, #FAF7EF 0%, #F8F1E7 44%, #EFE2D0 100%) !important;
+    z-index: -6;
+}}
+.bg-layer-2 {{ z-index: -5; }}
+.bg-layer-3 {{ z-index: -4; }}
+.halo-1 {{
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.72) 0%, rgba(248, 231, 207, 0.42) 42%, rgba(248, 231, 207, 0) 72%);
+    filter: blur(5px);
+}}
+.halo-2 {{
+    background: radial-gradient(circle, rgba(201, 167, 126, 0.18) 0%, rgba(255, 255, 255, 0.36) 32%, rgba(201, 167, 126, 0) 74%);
+    filter: blur(6px);
+}}
+.logo-title,
+.main-title,
+.generated-title-text,
+.section-title,
+.card-title {{
+    color: #6E4E3D !important;
+}}
+.logo-subtitle,
+.main-subtitle,
+.badge-label,
+.card-desc,
+div[data-testid="stTextArea"] label p {{
+    color: #9A806D !important;
+}}
+.main-title {{
+    text-shadow: 0 8px 30px rgba(110, 78, 61, 0.10), 0 1px 0 rgba(255, 255, 255, 0.75);
+}}
+.glass-card,
+.mode-card,
+.generated-box,
+.alert-card {{
+    background: rgba(255, 250, 242, 0.72) !important;
+    border-color: rgba(201, 167, 126, 0.28) !important;
+    box-shadow: 0 18px 45px rgba(110, 78, 61, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+    backdrop-filter: blur(18px) saturate(1.08) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.08) !important;
+}}
+.mode-card.card-active {{
+    background: linear-gradient(135deg, rgba(255, 252, 246, 0.88), rgba(201, 167, 126, 0.18)) !important;
+    border-color: rgba(185, 143, 101, 0.58) !important;
+}}
+div[data-testid="stTextArea"] textarea {{
+    background: rgba(255, 250, 242, 0.78) !important;
+    border: 1px solid rgba(201, 167, 126, 0.34) !important;
+    color: #6E4E3D !important;
+    box-shadow: 0 18px 45px rgba(110, 78, 61, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}}
+div.stButton > button {{
+    background: linear-gradient(135deg, #C9A77E 0%, #A97852 100%) !important;
+    color: #FFF8EF !important;
+    box-shadow: 0 18px 38px rgba(169, 120, 82, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+}}
+.floating-gallery-container {{
+    z-index: -2 !important;
+    overflow: visible;
+}}
+.polaroid-card {{
+    background: rgba(255, 255, 255, 0.88) !important;
+    border-color: rgba(255, 255, 255, 0.82) !important;
+    opacity: 0.72 !important;
+    box-shadow: 0 24px 48px rgba(110, 78, 61, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+    filter: blur(0.25px) saturate(0.92);
+}}
+.polaroid-card .art-placeholder {{
+    background:
+        radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 24%),
+        linear-gradient(135deg, rgba(239, 226, 208, 0.86), rgba(201, 167, 126, 0.28)) !important;
+}}
+.polaroid-card .art-caption {{
+    color: #8F7564;
+    font-style: italic;
+}}
+.bubble-container {{
+    z-index: -3;
+    overflow: visible;
+}}
+.bubble-shell {{
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    background:
+        radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.92) 0 4%, rgba(255, 255, 255, 0.18) 11%, transparent 23%),
+        radial-gradient(circle at 68% 72%, rgba(201, 167, 126, 0.19), rgba(255, 255, 255, 0) 46%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 60%, rgba(185, 143, 101, 0.16) 100%);
+    box-shadow:
+        inset 8px 10px 18px rgba(255, 255, 255, 0.34),
+        inset -12px -18px 28px rgba(185, 143, 101, 0.08),
+        0 0 24px rgba(255, 255, 255, 0.62),
+        0 18px 42px rgba(185, 143, 101, 0.10);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}}
+.pop-icon-wrapper {{
+    background: radial-gradient(circle, rgba(255, 250, 242, 0.36), rgba(201, 167, 126, 0.10));
+    border-radius: 50%;
+    filter: blur(0.35px) saturate(0.9);
+}}
+div[data-testid="stTextArea"],
+div[data-testid="stTextInput"],
+div[data-testid="stSelectbox"],
+div.stButton,
+.mode-card-wrapper,
+.glass-card,
+.gallery-frame,
+.generated-box,
+.alert-card {{
+    position: relative;
+    z-index: 20 !important;
+}}
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
