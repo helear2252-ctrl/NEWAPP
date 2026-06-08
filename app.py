@@ -712,59 +712,65 @@ def run_nvidia_generation(prompt: str):
     hf_token = raw_token.strip().strip("'\"").replace("“", "").replace("”", "").replace("‘", "").replace("’", "")
     hf_token = "".join(c for c in hf_token if ord(c) < 128)
 
-    api_url = "https://api-inference.huggingface.co/models/nvidia/Cosmos3-Super-Text2Image"
+    api_urls = [
+        "https://router.huggingface.co/hf-inference/models/nvidia/Cosmos3-Super-Text2Image",
+        "https://api-inference.huggingface.co/models/nvidia/Cosmos3-Super-Text2Image",
+    ]
     headers = {"Authorization": f"Bearer {hf_token}"}
     payload = {"inputs": prompt}
 
     max_retries = 3
     retry_delay = 5
 
-    for attempt in range(max_retries):
-        try:
-            response = requests.post(api_url, headers=headers, json=payload, timeout=60)
+    for api_url in api_urls:
+        for attempt in range(max_retries):
+            try:
+                response = requests.post(api_url, headers=headers, json=payload, timeout=60)
 
-            if response.status_code == 200:
-                try:
-                    image = Image.open(io.BytesIO(response.content))
-                    image.load()
-                    st.session_state.generated_image = image
-                    st.session_state.error_message = None
-                    return
-                except Exception as img_err:
-                    st.session_state.error_message = f"🖼️ NVIDIA image loading error: {str(img_err)}"
+                if response.status_code == 200:
+                    try:
+                        image = Image.open(io.BytesIO(response.content))
+                        image.load()
+                        st.session_state.generated_image = image
+                        st.session_state.error_message = None
+                        return
+                    except Exception as img_err:
+                        st.session_state.error_message = f"🖼️ NVIDIA image loading error: {str(img_err)}"
+                        return
+
+                if response.status_code == 503:
+                    try:
+                        error_json = response.json()
+                        wait_time = float(error_json.get("estimated_time", retry_delay))
+                    except Exception:
+                        wait_time = retry_delay
+
+                    if attempt < max_retries - 1:
+                        with st.spinner(f"⏳ NVIDIA Cosmos model is initializing (attempt {attempt+1}/{max_retries}). Waiting {int(wait_time)}s..."):
+                            time.sleep(wait_time)
+                        continue
+                    break
+
+                if response.status_code == 401:
+                    st.session_state.error_message = "🔒 Authentication Failed: The provided `HF_TOKEN` is invalid or does not have permissions. Please check your credentials."
                     return
 
-            if response.status_code == 503:
                 try:
                     error_json = response.json()
-                    wait_time = float(error_json.get("estimated_time", retry_delay))
+                    error_msg = error_json.get("error", "")
                 except Exception:
-                    wait_time = retry_delay
+                    error_msg = ""
+                st.session_state.error_message = f"🚨 NVIDIA API Error: {error_msg if error_msg else f'HTTP status {response.status_code}'}"
+                break
 
-                if attempt < max_retries - 1:
-                    with st.spinner(f"⏳ NVIDIA Cosmos model is initializing (attempt {attempt+1}/{max_retries}). Waiting {int(wait_time)}s..."):
-                        time.sleep(wait_time)
+            except requests.exceptions.RequestException as err:
+                if isinstance(err, (requests.exceptions.ConnectionError, requests.exceptions.Timeout)) and attempt < max_retries - 1:
+                    time.sleep(2)
                     continue
                 break
 
-            if response.status_code == 401:
-                st.session_state.error_message = "🔒 Authentication Failed: The provided `HF_TOKEN` is invalid or does not have permissions. Please check your credentials."
-                return
-
-            try:
-                error_json = response.json()
-                error_msg = error_json.get("error", "")
-            except Exception:
-                error_msg = ""
-            st.session_state.error_message = f"🚨 NVIDIA API Error: {error_msg if error_msg else f'HTTP status {response.status_code}'}"
+        if st.session_state.generated_image:
             return
-
-        except requests.exceptions.RequestException as err:
-            if attempt < max_retries - 1:
-                time.sleep(2)
-                continue
-            st.session_state.error_message = f"🔌 NVIDIA network connection failure: Details: {str(err)}"
-            break
 
     if not st.session_state.error_message:
         st.session_state.error_message = "⚠️ NVIDIA 免費生成模型目前忙碌或暫時無法使用，請稍後再試。"
