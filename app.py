@@ -900,8 +900,11 @@ background_html = """
         <div class="art-caption">Watercolor Art</div>
     </div>
 </div>
+"""
+st.markdown(background_html, unsafe_allow_html=True)
 
-<!-- Bubble To Art Background Animation -->
+# Bubble To Art Background Animation HTML
+bubble_html = """
 <div class="bubble-container">
     <!-- Bubble 1: Logo -->
     <div class="art-bubble ab-1">
@@ -1009,7 +1012,7 @@ background_html = """
     </div>
 </div>
 """
-st.markdown(background_html, unsafe_allow_html=True)
+st.markdown(bubble_html, unsafe_allow_html=True)
 
 # Brand Logo
 logo_html = """
