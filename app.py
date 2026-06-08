@@ -775,6 +775,211 @@ div.stButton,
     position: relative;
     z-index: 20 !important;
 }}
+/* Full homepage composition pass: layout-like styling without touching generation logic */
+.main .block-container {{
+    max-width: 1220px !important;
+    padding-top: 30px !important;
+    padding-bottom: 64px !important;
+}}
+.champagne-particles {{
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+    pointer-events: none;
+    opacity: .68;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,.96) 0 1px, transparent 2px),
+        radial-gradient(circle, rgba(201,167,126,.44) 0 1px, transparent 2px),
+        radial-gradient(circle, rgba(255,242,224,.86) 0 2px, transparent 4px);
+    background-size: 38px 38px, 73px 73px, 128px 128px;
+    background-position: 8px 14px, 28px 20px, 42px 36px;
+    filter: blur(.25px);
+    animation: particle-drift 24s linear infinite;
+}}
+@keyframes particle-drift {{
+    from {{ transform: translateY(0); }}
+    to {{ transform: translateY(-38px); }}
+}}
+.background-bubble {{
+    position: fixed;
+    border-radius: 50%;
+    z-index: -4;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 28% 22%, rgba(255,255,255,.95) 0 5%, rgba(255,255,255,.25) 13%, transparent 25%),
+        radial-gradient(circle at 68% 72%, rgba(201,167,126,.18), rgba(255,255,255,0) 48%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.18), rgba(255,255,255,.04) 62%, rgba(185,143,101,.16) 100%);
+    border: 1px solid rgba(255,255,255,.72);
+    box-shadow: inset 10px 12px 22px rgba(255,255,255,.38), inset -14px -18px 30px rgba(185,143,101,.08), 0 0 30px rgba(255,255,255,.58);
+    opacity: var(--op);
+    filter: blur(var(--blur));
+    animation: soft-orbit var(--speed) ease-in-out infinite;
+}}
+.bb-1 {{ width: 178px; height: 178px; left: 3vw; top: 16vh; --op: .72; --blur: 0px; --speed: 18s; }}
+.bb-2 {{ width: 96px; height: 96px; left: 13vw; top: 34vh; --op: .52; --blur: .8px; --speed: 21s; }}
+.bb-3 {{ width: 42px; height: 42px; left: 38vw; top: 9vh; --op: .42; --blur: 1px; --speed: 16s; }}
+.bb-4 {{ width: 260px; height: 260px; left: 58vw; top: 17vh; --op: .32; --blur: 1.5px; --speed: 26s; }}
+.bb-5 {{ width: 84px; height: 84px; right: 18vw; top: 43vh; --op: .46; --blur: .7px; --speed: 17s; }}
+.bb-6 {{ width: 210px; height: 210px; left: 1vw; bottom: 4vh; --op: .42; --blur: .6px; --speed: 23s; }}
+.bb-7 {{ width: 54px; height: 54px; right: 7vw; top: 3vh; --op: .46; --blur: .9px; --speed: 19s; }}
+@keyframes soft-orbit {{
+    0%, 100% {{ transform: translate3d(0, 0, 0) scale(1); }}
+    45% {{ transform: translate3d(16px, -20px, 0) scale(1.035); }}
+    72% {{ transform: translate3d(-8px, 10px, 0) scale(.99); }}
+}}
+.hero-panel {{
+    position: relative;
+    z-index: 24;
+    text-align: center;
+    padding-top: 12px;
+}}
+.main-title {{
+    text-align: center;
+    max-width: 780px;
+    margin: 46px auto 8px !important;
+    font-size: clamp(52px, 6.7vw, 84px) !important;
+    line-height: .92 !important;
+}}
+.main-subtitle {{
+    text-align: center;
+    letter-spacing: 1.75px !important;
+}}
+.mode-label {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin: 10px auto 16px;
+    color: #8F7564;
+    font-size: 16px;
+    font-weight: 700;
+}}
+.mode-label::before,
+.mode-label::after {{
+    content: "";
+    width: 112px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,167,126,.46), transparent);
+}}
+.prompt-heading {{
+    text-align: center;
+    margin: 18px auto 12px;
+}}
+.prompt-heading-title {{
+    color: #7B5A46;
+    font-size: 18px;
+    font-weight: 700;
+}}
+.prompt-heading-subtitle {{
+    color: #9A806D;
+    font-size: 13px;
+    margin-top: 4px;
+}}
+div[data-testid="stTextArea"] {{
+    max-width: 760px;
+    margin: 0 auto !important;
+}}
+.photo-scene {{
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    background: var(--scene-bg);
+}}
+.photo-scene::before {{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 28% 18%, rgba(255,255,255,.78), transparent 28%);
+}}
+.scene-castle {{ --scene-bg: linear-gradient(145deg, #efe0c8 0%, #b9a68c 48%, #f8f1e7 100%); }}
+.scene-corgi {{ --scene-bg: linear-gradient(145deg, #f5d9bd 0%, #d89e6f 45%, #f8f1e7 100%); }}
+.scene-city {{ --scene-bg: linear-gradient(145deg, #40314b 0%, #946a83 45%, #f4c794 100%); }}
+.scene-portrait {{ --scene-bg: linear-gradient(145deg, #ead2bd 0%, #c49275 50%, #fff6ea 100%); }}
+.scene-logo {{ --scene-bg: linear-gradient(145deg, #f6eadb 0%, #c9a77e 54%, #fffaf2 100%); }}
+.scene-water {{ --scene-bg: linear-gradient(145deg, #e9d7c2 0%, #b9c5bd 48%, #fffaf2 100%); }}
+.photo-mark {{
+    position: absolute;
+    inset: 18%;
+    border: 1px solid rgba(110,78,61,.38);
+    border-radius: 50%;
+    box-shadow: inset 0 0 22px rgba(255,255,255,.35);
+}}
+.photo-mark::after {{
+    content: "";
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    bottom: 18%;
+    height: 28%;
+    border-radius: 50% 50% 0 0;
+    background: rgba(110,78,61,.18);
+}}
+.pc-1 {{ top: 4%; right: 25%; width: 162px !important; filter: blur(.1px); }}
+.pc-2 {{ top: 23%; right: 3%; width: 146px !important; filter: blur(.25px); }}
+.pc-3 {{ top: 48%; right: 7%; width: 170px !important; filter: blur(.1px); }}
+.pc-4 {{ top: 70%; right: 24%; width: 154px !important; filter: blur(.45px); }}
+.pc-5 {{ top: 9%; right: 1%; width: 104px !important; opacity: .50 !important; filter: blur(1.1px); }}
+.pc-6 {{ top: 76%; right: 2%; width: 110px !important; opacity: .42 !important; filter: blur(1.2px); }}
+.bubble-art-thumb {{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: .72;
+    background: var(--bubble-art);
+    box-shadow: inset 0 0 20px rgba(255,255,255,.45);
+}}
+.thumb-1 {{ --bubble-art: linear-gradient(135deg, #f2d9ba, #b98f65 45%, #fff6ea); }}
+.thumb-2 {{ --bubble-art: linear-gradient(135deg, #f7e3c8, #c9996f 48%, #fdf7ee); }}
+.thumb-3 {{ --bubble-art: linear-gradient(135deg, #efd6bf, #9f7d6a 46%, #fff8f0); }}
+.thumb-4 {{ --bubble-art: linear-gradient(135deg, #f5e5d2, #c9a77e 52%, #fffaf2); }}
+.thumb-5 {{ --bubble-art: linear-gradient(135deg, #d7c1aa, #71506a 45%, #f2c58f); }}
+.thumb-6 {{ --bubble-art: linear-gradient(135deg, #fff1dc, #c49275 48%, #fdf7ee); }}
+.bubble-label {{
+    position: fixed;
+    left: 52px;
+    top: 53vh;
+    z-index: -1;
+    color: rgba(110,78,61,.46);
+    border: 1px solid rgba(185,143,101,.22);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: center;
+    background: rgba(255,250,242,.20);
+}}
+.flow-rail {{
+    position: fixed;
+    right: 17%;
+    top: 50%;
+    z-index: -1;
+    transform: translateY(-50%);
+    color: rgba(110,78,61,.34);
+    font-size: 12px;
+    line-height: 2.2;
+    text-align: center;
+}}
+.flow-rail span {{ display: block; }}
+div[data-testid="stTextArea"],
+div[data-testid="stTextInput"],
+div[data-testid="stSelectbox"],
+div.stButton,
+.mode-card-wrapper,
+.glass-card,
+.gallery-frame,
+.generated-box,
+.alert-card {{
+    z-index: 40 !important;
+}}
+@media (max-width: 900px) {{
+    .floating-gallery-container {{ opacity: .26; width: 100%; }}
+    .pc-2, .pc-3, .pc-4, .pc-5, .pc-6, .flow-rail {{ display: none; }}
+    .pc-1 {{ right: -24px; top: 8%; width: 118px !important; }}
+    .main-title {{ font-size: 48px !important; margin-top: 20px !important; }}
+    .mode-label::before, .mode-label::after {{ width: 44px; }}
+}}
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
@@ -1013,6 +1218,24 @@ background_html = """
 <div class="bg-layer-2">
     <div class="halo-1"></div>
     <div class="halo-2"></div>
+    <div class="champagne-particles"></div>
+    <div class="background-bubble bb-1"></div>
+    <div class="background-bubble bb-2"></div>
+    <div class="background-bubble bb-3"></div>
+    <div class="background-bubble bb-4"></div>
+    <div class="background-bubble bb-5"></div>
+    <div class="background-bubble bb-6"></div>
+    <div class="background-bubble bb-7"></div>
+    <div class="bubble-label">Bubble<br>to<br>Art</div>
+    <div class="flow-rail">
+        <span>Prompt</span>
+        <span>↓</span>
+        <span>AI</span>
+        <span>↓</span>
+        <span>Art</span>
+        <span>↓</span>
+        <span>Gallery</span>
+    </div>
 </div>
 <div class="bg-layer-3">
     <!-- Coffee Cup -->
@@ -1061,75 +1284,42 @@ background_html = """
     <!-- Polaroid 1: Fantasy Castle -->
     <div class="polaroid-card pc-1">
         <div class="art-placeholder">
-            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
-                <path d="M25 80 h50 M30 80 v-30 h8 v30 M62 80 v-30 h8 v30 M38 80 v-20 h24 v20 M45 60 v-15 h10 v15" />
-                <path d="M28 50 l6-12 6 12 Z M60 50 l6-12 6 12 Z M42 40 l8-15 8 15 Z" />
-                <path d="M50 25 v-8 l4 2-4 2" />
-                <path d="M15 65 c-3-3-8 0-6 4 c-2 5 3 7 7 5 M85 65 c3-3 8 0 6 4 c2 5-3 7-7 5" stroke-dasharray="2,2" />
-            </svg>
+            <div class="photo-scene scene-castle"><div class="photo-mark"></div></div>
         </div>
         <div class="art-caption">Fantasy Castle</div>
     </div>
     <!-- Polaroid 2: Cute Animal -->
     <div class="polaroid-card pc-2">
         <div class="art-placeholder">
-            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
-                <circle cx="50" cy="55" r="22" />
-                <path d="M33 39 L22 15 L38 35 M67 39 L78 15 L62 35" />
-                <circle cx="42" cy="50" r="1.5" fill="#A48977" />
-                <circle cx="58" cy="50" r="1.5" fill="#A48977" />
-                <path d="M48 56 l2 2 l2-2 M45 61 c2-1 8-1 10 0" />
-                <path d="M23 54 h8 M23 58 l8-1 M77 54 h-8 M77 58 l-8-1" />
-            </svg>
+            <div class="photo-scene scene-corgi"><div class="photo-mark"></div></div>
         </div>
         <div class="art-caption">Cute Animal</div>
     </div>
     <!-- Polaroid 3: Cyber City -->
     <div class="polaroid-card pc-3">
         <div class="art-placeholder">
-            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
-                <path d="M15 85 v-40 h15 v40 M30 85 v-60 h20 v65 M50 85 v-50 h15 v45 M65 85 v-30 h20 v30" />
-                <path d="M20 50 h5 M20 60 h5 M20 70 h5 M37 35 h6 M37 45 h6 M37 55 h6 M37 65 h6 M37 75 h6 M58 45 h4 M58 55 h4 M58 65 h4 M58 75 h4" />
-                <path d="M10 25 l30 20 M90 20 l-40 30" stroke-dasharray="3,3" />
-            </svg>
+            <div class="photo-scene scene-city"><div class="photo-mark"></div></div>
         </div>
         <div class="art-caption">Cyber City</div>
     </div>
     <!-- Polaroid 4: AI Portrait -->
     <div class="polaroid-card pc-4">
         <div class="art-placeholder">
-            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
-                <path d="M35 75 C38 65, 42 55, 45 48 C42 42, 42 35, 45 30 C48 25, 55 25, 58 30 C62 35, 62 42, 58 48 C62 55, 66 65, 70 75 M50 20 C52 18, 55 18, 57 20 M48 36 h4 M54 36 h4 M47 42 C50 44, 54 44, 57 42" />
-                <path d="M45 28 C35 25, 30 35, 32 45 C34 55, 30 65, 25 70" />
-                <path d="M58 28 C68 25, 73 35, 71 45 C69 55, 73 65, 78 70" stroke-dasharray="2,2" />
-            </svg>
+            <div class="photo-scene scene-portrait"><div class="photo-mark"></div></div>
         </div>
         <div class="art-caption">AI Portrait</div>
     </div>
     <!-- Polaroid 5: Logo Design -->
     <div class="polaroid-card pc-5">
         <div class="art-placeholder">
-            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
-                <circle cx="50" cy="50" r="24" />
-                <circle cx="50" cy="50" r="14" />
-                <path d="M20 50 h60 M50 20 v60 M28 28 l44 44 M28 72 l44-44" stroke-dasharray="2,2" />
-                <rect x="47" y="17" width="6" height="6" />
-                <rect x="47" y="77" width="6" height="6" />
-                <rect x="17" y="47" width="6" height="6" />
-                <rect x="77" y="47" width="6" height="6" />
-            </svg>
+            <div class="photo-scene scene-logo"><div class="photo-mark"></div></div>
         </div>
         <div class="art-caption">Logo Design</div>
     </div>
     <!-- Polaroid 6: Watercolor Art -->
     <div class="polaroid-card pc-6">
         <div class="art-placeholder">
-            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1" fill="none">
-                <path d="M30 45 c-10-5-20 5-15 15 s15 25 30 20 s15-20 10-25 s-15-5-25-10 Z" style="fill: rgba(225,209,186,0.3); stroke: none;" />
-                <path d="M50 35 c10-5 20 5 15 15 s-5 25-20 20 s-15-20-10-25 s5-5 15-10 Z" style="fill: rgba(164,137,119,0.25); stroke: none;" />
-                <path d="M42 52 c8-8 18-4 14 12 s-12 12-20 4 s0-12 8-16 Z" style="fill: rgba(234,231,218,0.45); stroke: none;" stroke="#A48977" stroke-width="1" />
-                <circle cx="48" cy="48" r="30" stroke-dasharray="3,3" />
-            </svg>
+            <div class="photo-scene scene-water"><div class="photo-mark"></div></div>
         </div>
         <div class="art-caption">Watercolor Art</div>
     </div>
@@ -1149,12 +1339,7 @@ bubble_html = """
             </svg>
         </div>
         <div class="pop-icon-wrapper">
-            <svg viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="30" stroke="#A48977" stroke-width="1.2" fill="none"/>
-                <circle cx="50" cy="50" r="15" stroke="#A48977" stroke-width="0.8" fill="none"/>
-                <line x1="50" y1="10" x2="50" y2="90" stroke="#A48977" stroke-width="0.5" stroke-dasharray="2,2"/>
-                <line x1="10" y1="50" x2="90" y2="50" stroke="#A48977" stroke-width="0.5" stroke-dasharray="2,2"/>
-            </svg>
+            <div class="bubble-art-thumb thumb-1"></div>
         </div>
     </div>
     
@@ -1167,10 +1352,7 @@ bubble_html = """
             </svg>
         </div>
         <div class="pop-icon-wrapper">
-            <svg viewBox="0 0 100 100">
-                <path d="M35 65 L60 40 L65 45 L40 70 Z M60 40 L70 30 C72 28, 76 28, 78 30 C80 32, 80 36, 78 38 L68 48 Z M35 65 L25 75 L30 70 Z" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
-                <path d="M25 75 L20 80 L22 73 Z" fill="#A48977"/>
-            </svg>
+            <div class="bubble-art-thumb thumb-2"></div>
         </div>
     </div>
     
@@ -1183,12 +1365,7 @@ bubble_html = """
             </svg>
         </div>
         <div class="pop-icon-wrapper">
-            <svg viewBox="0 0 100 100">
-                <path d="M20 40 h15 l5-8 h20 l5 8 h15 v35 h-60 z" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
-                <circle cx="50" cy="58" r="14" stroke="#A48977" stroke-width="1.2" fill="none"/>
-                <circle cx="50" cy="58" r="7" stroke="#A48977" stroke-width="0.8" fill="none"/>
-                <circle cx="70" cy="46" r="3" fill="#A48977"/>
-            </svg>
+            <div class="bubble-art-thumb thumb-3"></div>
         </div>
     </div>
     
@@ -1201,13 +1378,7 @@ bubble_html = """
             </svg>
         </div>
         <div class="pop-icon-wrapper">
-            <svg viewBox="0 0 100 100">
-                <path d="M50 20 C25 20, 20 38, 20 55 C20 72, 38 80, 55 80 C68 80, 80 72, 80 58 C80 44, 75 42, 68 42 C64 42, 60 46, 56 46 C52 46, 50 38, 50 20 Z" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
-                <circle cx="35" cy="40" r="3" fill="#A48977"/>
-                <circle cx="45" cy="62" r="3" fill="#A48977"/>
-                <circle cx="65" cy="62" r="3" fill="#A48977"/>
-                <circle cx="68" cy="32" r="2.5" stroke="#A48977" stroke-width="0.8" fill="none"/>
-            </svg>
+            <div class="bubble-art-thumb thumb-4"></div>
         </div>
     </div>
     
@@ -1220,11 +1391,7 @@ bubble_html = """
             </svg>
         </div>
         <div class="pop-icon-wrapper">
-            <svg viewBox="0 0 100 100">
-                <rect x="22" y="22" width="56" height="56" rx="6" stroke="#A48977" stroke-width="1.2" fill="none"/>
-                <circle cx="38" cy="38" r="6" stroke="#A48977" stroke-width="1.2" fill="none"/>
-                <path d="M22 66 L42 46 L62 66 M54 58 L66 46 L78 58" stroke="#A48977" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
-            </svg>
+            <div class="bubble-art-thumb thumb-5"></div>
         </div>
     </div>
     
@@ -1237,11 +1404,7 @@ bubble_html = """
             </svg>
         </div>
         <div class="pop-icon-wrapper">
-            <svg viewBox="0 0 100 100">
-                <rect x="20" y="20" width="60" height="60" stroke="#A48977" stroke-width="1.2" fill="none"/>
-                <path d="M10 20 h20 M20 10 v20 M80 10 v20 M70 20 h20 M80 90 v-20 M70 80 h20 M10 80 h20 M20 70 v20" stroke="#A48977" stroke-width="1" fill="none"/>
-                <circle cx="50" cy="50" r="8" stroke="#A48977" stroke-width="1" fill="none" stroke-dasharray="2,2"/>
-            </svg>
+            <div class="bubble-art-thumb thumb-6"></div>
         </div>
     </div>
 </div>
@@ -1260,15 +1423,15 @@ logo_html = """
 """
 st.markdown(logo_html, unsafe_allow_html=True)
 
-# Main 2-Column top section to align title/input on the left and keep background globe visible
-col_top_left, col_top_right = st.columns([6, 4])
+# Centered hero section; decorative background remains behind the content
+col_top_left_pad, col_top_left, col_top_right = st.columns([1, 8, 1])
 
 with col_top_left:
-    st.markdown('<div class="main-title">AI IMAGE GENERATOR</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-panel"><div class="main-title">AI IMAGE<br>GENERATOR</div></div>', unsafe_allow_html=True)
     st.markdown('<div class="main-subtitle">Creative AI Studio  •  Prompt to Art  •  AI Gallery</div>', unsafe_allow_html=True)
     
     # Generation Mode Selector
-    st.markdown('<p style="color:#A48977; font-size:14px; font-weight:500; margin-bottom: 8px; font-family: \'Outfit\', sans-serif;">Generation Mode</p>', unsafe_allow_html=True)
+    st.markdown('<div class="mode-label">選擇生成模式</div>', unsafe_allow_html=True)
     
     col_card1, col_card2, col_card3 = st.columns(3)
     
@@ -1326,7 +1489,15 @@ with col_top_left:
         input_label = "Describe the image you want to generate"
         
     # Input Area
-    st.markdown(f'<p style="color:#A48977; font-size:14px; font-weight:500; margin-bottom: 8px;">{input_label}</p>', unsafe_allow_html=True)
+    st.markdown(
+        f'''
+        <div class="prompt-heading">
+            <div class="prompt-heading-title">{input_label}</div>
+            <div class="prompt-heading-subtitle">越詳細的描述，越能生成符合想像的圖片</div>
+        </div>
+        ''',
+        unsafe_allow_html=True
+    )
     prompt = st.text_area(
         label="Prompt input label",
         value=st.session_state.prompt_text,
