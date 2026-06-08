@@ -435,7 +435,7 @@ div[data-testid="column"]:has(.mode-card-wrapper) div.stButton > button {{
     width: 32%;
     height: 100vh;
     pointer-events: none;
-    z-index: 1 !important;
+    z-index: -1 !important;
     overflow: hidden;
 }}
 .polaroid-card {{
@@ -626,6 +626,17 @@ div[data-testid="column"]:has(.mode-card-wrapper) div.stButton > button {{
     50% {{ opacity: var(--icon-op); transform: scale(1.2) translateY(0); }}
     60% {{ opacity: calc(var(--icon-op) * 0.8); transform: scale(1) translateY(-15px); }}
     100% {{ opacity: 0; transform: scale(0.7) translateY(-60px); }}
+}}
+
+/* Ensure all interactive elements stack above backgrounds */
+div[data-testid="stTextArea"], 
+div[data-testid="stTextInput"], 
+div[data-testid="stSelectbox"], 
+div.stButton, 
+.mode-card-wrapper,
+.glass-card {{
+    position: relative;
+    z-index: 10 !important;
 }}
 </style>
 """
