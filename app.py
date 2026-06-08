@@ -426,6 +426,87 @@ div[data-testid="column"]:has(.mode-card-wrapper) div.stButton > button {{
     font-size: 14px;
     margin-bottom: 20px;
 }}
+
+/* --- FLOATING AI GALLERY (POLAROIDS) --- */
+.floating-gallery-container {{
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 32%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1 !important;
+    overflow: hidden;
+}}
+.polaroid-card {{
+    background: #FFFFFF !important;
+    border: 1px solid rgba(164, 137, 119, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    padding-bottom: 25px !important;
+    box-shadow: 0 10px 25px rgba(164, 137, 119, 0.08) !important;
+    position: absolute;
+    width: 120px !important;
+    opacity: 0.35; /* 20% to 40% range */
+    transition: all 0.3s ease;
+    pointer-events: none;
+    text-align: center;
+}}
+.polaroid-card .art-placeholder {{
+    width: 100%;
+    aspect-ratio: 1;
+    background: #F7F4ED;
+    border: 1px solid rgba(164, 137, 119, 0.08);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+}}
+.polaroid-card .art-placeholder svg {{
+    width: 100%;
+    height: 100%;
+}}
+.polaroid-card .art-caption {{
+    font-family: 'Playfair Display', serif;
+    font-size: 9px;
+    color: #A48977;
+    margin-top: 6px;
+    font-weight: 500;
+}}
+
+/* Polaroids layout & animations */
+.pc-1 {{ top: 12%; right: 14%; filter: blur(0.5px); animation: float-polaroid-1 12s infinite ease-in-out; }}
+.pc-2 {{ top: 35%; right: 3%; filter: blur(1px); animation: float-polaroid-2 15s infinite ease-in-out; }}
+.pc-3 {{ top: 58%; right: 15%; filter: blur(0.5px); animation: float-polaroid-3 14s infinite ease-in-out; }}
+.pc-4 {{ top: 22%; right: 2%; filter: blur(1.5px); animation: float-polaroid-4 16s infinite ease-in-out; }}
+.pc-5 {{ top: 48%; right: 9%; filter: blur(0.5px); animation: float-polaroid-5 13s infinite ease-in-out; }}
+.pc-6 {{ top: 72%; right: 3%; filter: blur(1px); animation: float-polaroid-6 17s infinite ease-in-out; }}
+
+@keyframes float-polaroid-1 {{
+    0%, 100% {{ transform: translateY(0) rotate(-5deg); }}
+    50% {{ transform: translateY(-12px) rotate(-3deg); }}
+}}
+@keyframes float-polaroid-2 {{
+    0%, 100% {{ transform: translateY(0) rotate(4deg); }}
+    50% {{ transform: translateY(-18px) rotate(6deg); }}
+}}
+@keyframes float-polaroid-3 {{
+    0%, 100% {{ transform: translateY(0) rotate(-3deg); }}
+    50% {{ transform: translateY(-14px) rotate(-1deg); }}
+}}
+@keyframes float-polaroid-4 {{
+    0%, 100% {{ transform: translateY(0) rotate(5deg); }}
+    50% {{ transform: translateY(-16px) rotate(3deg); }}
+}}
+@keyframes float-polaroid-5 {{
+    0%, 100% {{ transform: translateY(0) rotate(-4deg); }}
+    50% {{ transform: translateY(-10px) rotate(-6deg); }}
+}}
+@keyframes float-polaroid-6 {{
+    0%, 100% {{ transform: translateY(0) rotate(6deg); }}
+    50% {{ transform: translateY(-15px) rotate(4deg); }}
+}}
 </style>
 """
 st.markdown(css_style, unsafe_allow_html=True)
@@ -619,6 +700,85 @@ background_html = """
         <line x1="50" y1="0" x2="50" y2="15" stroke="#A48977" stroke-width="1"/>
         <circle cx="50" cy="5" r="2" fill="#A48977"/>
     </svg>
+</div>
+
+<!-- Floating Polaroid AI Gallery (Right side) -->
+<div class="floating-gallery-container">
+    <!-- Polaroid 1: Fantasy Castle -->
+    <div class="polaroid-card pc-1">
+        <div class="art-placeholder">
+            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
+                <path d="M25 80 h50 M30 80 v-30 h8 v30 M62 80 v-30 h8 v30 M38 80 v-20 h24 v20 M45 60 v-15 h10 v15" />
+                <path d="M28 50 l6-12 6 12 Z M60 50 l6-12 6 12 Z M42 40 l8-15 8 15 Z" />
+                <path d="M50 25 v-8 l4 2-4 2" />
+                <path d="M15 65 c-3-3-8 0-6 4 c-2 5 3 7 7 5 M85 65 c3-3 8 0 6 4 c2 5-3 7-7 5" stroke-dasharray="2,2" />
+            </svg>
+        </div>
+        <div class="art-caption">Fantasy Castle</div>
+    </div>
+    <!-- Polaroid 2: Cute Animal -->
+    <div class="polaroid-card pc-2">
+        <div class="art-placeholder">
+            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
+                <circle cx="50" cy="55" r="22" />
+                <path d="M33 39 L22 15 L38 35 M67 39 L78 15 L62 35" />
+                <circle cx="42" cy="50" r="1.5" fill="#A48977" />
+                <circle cx="58" cy="50" r="1.5" fill="#A48977" />
+                <path d="M48 56 l2 2 l2-2 M45 61 c2-1 8-1 10 0" />
+                <path d="M23 54 h8 M23 58 l8-1 M77 54 h-8 M77 58 l-8-1" />
+            </svg>
+        </div>
+        <div class="art-caption">Cute Animal</div>
+    </div>
+    <!-- Polaroid 3: Cyber City -->
+    <div class="polaroid-card pc-3">
+        <div class="art-placeholder">
+            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
+                <path d="M15 85 v-40 h15 v40 M30 85 v-60 h20 v65 M50 85 v-50 h15 v45 M65 85 v-30 h20 v30" />
+                <path d="M20 50 h5 M20 60 h5 M20 70 h5 M37 35 h6 M37 45 h6 M37 55 h6 M37 65 h6 M37 75 h6 M58 45 h4 M58 55 h4 M58 65 h4 M58 75 h4" />
+                <path d="M10 25 l30 20 M90 20 l-40 30" stroke-dasharray="3,3" />
+            </svg>
+        </div>
+        <div class="art-caption">Cyber City</div>
+    </div>
+    <!-- Polaroid 4: AI Portrait -->
+    <div class="polaroid-card pc-4">
+        <div class="art-placeholder">
+            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
+                <path d="M35 75 C38 65, 42 55, 45 48 C42 42, 42 35, 45 30 C48 25, 55 25, 58 30 C62 35, 62 42, 58 48 C62 55, 66 65, 70 75 M50 20 C52 18, 55 18, 57 20 M48 36 h4 M54 36 h4 M47 42 C50 44, 54 44, 57 42" />
+                <path d="M45 28 C35 25, 30 35, 32 45 C34 55, 30 65, 25 70" />
+                <path d="M58 28 C68 25, 73 35, 71 45 C69 55, 73 65, 78 70" stroke-dasharray="2,2" />
+            </svg>
+        </div>
+        <div class="art-caption">AI Portrait</div>
+    </div>
+    <!-- Polaroid 5: Logo Design -->
+    <div class="polaroid-card pc-5">
+        <div class="art-placeholder">
+            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1.2" fill="none">
+                <circle cx="50" cy="50" r="24" />
+                <circle cx="50" cy="50" r="14" />
+                <path d="M20 50 h60 M50 20 v60 M28 28 l44 44 M28 72 l44-44" stroke-dasharray="2,2" />
+                <rect x="47" y="17" width="6" height="6" />
+                <rect x="47" y="77" width="6" height="6" />
+                <rect x="17" y="47" width="6" height="6" />
+                <rect x="77" y="47" width="6" height="6" />
+            </svg>
+        </div>
+        <div class="art-caption">Logo Design</div>
+    </div>
+    <!-- Polaroid 6: Watercolor Art -->
+    <div class="polaroid-card pc-6">
+        <div class="art-placeholder">
+            <svg viewBox="0 0 100 100" stroke="#A48977" stroke-width="1" fill="none">
+                <path d="M30 45 c-10-5-20 5-15 15 s15 25 30 20 s15-20 10-25 s-15-5-25-10 Z" style="fill: rgba(225,209,186,0.3); stroke: none;" />
+                <path d="M50 35 c10-5 20 5 15 15 s-5 25-20 20 s-15-20-10-25 s5-5 15-10 Z" style="fill: rgba(164,137,119,0.25); stroke: none;" />
+                <path d="M42 52 c8-8 18-4 14 12 s-12 12-20 4 s0-12 8-16 Z" style="fill: rgba(234,231,218,0.45); stroke: none;" stroke="#A48977" stroke-width="1" />
+                <circle cx="48" cy="48" r="30" stroke-dasharray="3,3" />
+            </svg>
+        </div>
+        <div class="art-caption">Watercolor Art</div>
+    </div>
 </div>
 """
 st.markdown(background_html, unsafe_allow_html=True)
